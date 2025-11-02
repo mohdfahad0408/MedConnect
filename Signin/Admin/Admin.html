@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 20%, #bae6fd 40%, #e0f2fe 60%, #ffffff 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 20s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(14, 165, 233, 0.03) 35px, rgba(14, 165, 233, 0.03) 70px);
+            animation: patternSlide 40s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes patternSlide {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(70px) translateY(70px); }
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(14, 165, 233, 0.06), transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(56, 189, 248, 0.06), transparent 50%);
+            animation: glowShift 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes glowShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-container {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 24px;
+            padding: 45px;
+            box-shadow: 
+                0 20px 60px rgba(14, 165, 233, 0.15),
+                0 0 0 1px rgba(14, 165, 233, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 3px solid rgba(14, 165, 233, 0.2);
+            position: relative;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8, #0ea5e9);
+            background-size: 200% 100%;
+            border-radius: 24px 24px 0 0;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .form-header h1 {
+            color: #0c4a6e;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            color: #0369a1;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .form-header .icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #0369a1;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #0c4a6e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group label .required {
+            color: #0ea5e9;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(14, 165, 233, 0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #0c4a6e;
+        }
+
+        .form-group input::placeholder {
+            color: #7dd3fc;
+            font-weight: 300;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(14, 165, 233, 0.15);
+        }
+
+        .form-footer a {
+            color: #0ea5e9;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .info-text {
+            background: rgba(14, 165, 233, 0.08);
+            border-left: 4px solid #0ea5e9;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #0369a1;
+            line-height: 1.6;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(14, 165, 233, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(14, 165, 233, 0.3);
+        }
+
+        .register-link p {
+            color: #0369a1;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .register-link a {
+            color: #0ea5e9;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Popup Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 74, 110, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay:target {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 24px;
+            padding: 45px;
+            box-shadow: 
+                0 30px 80px rgba(14, 165, 233, 0.3),
+                0 0 0 1px rgba(14, 165, 233, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 3px solid rgba(14, 165, 233, 0.2);
+            position: relative;
+            width: 100%;
+            max-width: 750px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s ease-out;
+            margin: 40px 0;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8, #0ea5e9);
+            background-size: 200% 100%;
+            border-radius: 24px 24px 0 0;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(14, 165, 233, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #0369a1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            background: #ffffff;
+            border-color: #0ea5e9;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .form-container,
+            .modal-content {
+                padding: 35px 25px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .form-header h1 {
+                font-size: 26px;
+            }
+
+            .form-header .icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .modal-content {
+                margin: 20px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .form-container,
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .form-header h1 {
+                font-size: 24px;
+            }
+
+            .modal-close {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Admin Login Section -->
+        <div class="form-container">
+            <div class="form-header">
+                <div class="icon">🔐</div>
+                <h1>Admin Login</h1>
+                <p>Access the hospital management system</p>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label for="adminEmailMobile">Email or Mobile Number<span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="adminEmailMobile" 
+                        placeholder="admin@hospital.com or +91 9876543210"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Password<span class="required">*</span></label>
+                    <input 
+                        type="password" 
+                        id="adminPassword" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+                <button type="button" id="adminLoginBtn" class="btn-primary">Login to Dashboard</button>
+
+                <div class="form-footer">
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </form>
+
+            <!-- New Registration Link -->
+            <div class="register-link">
+                <p>👨‍⚕️ Are you a new doctor?</p>
+                <a href="#doctor-registration-modal">Register as Doctor</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Registration Modal Popup -->
+    <div class="modal-overlay" id="doctor-registration-modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">×</a>
+            
+            <div class="form-header">
+                <div class="icon">👨‍⚕️</div>
+                <h1>Doctor Registration</h1>
+                <p>Join our healthcare network</p>
+            </div>
+
+            <div class="info-text">
+                📋 Please fill all required fields marked with asterisk (*) to complete your registration.
+            </div>
+
+            <form>
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <div class="section-title">Personal Information</div>
+                    
+                    <div class="form-group">
+                        <label for="doctorName">Full Name<span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="doctorName" 
+                            placeholder="Dr. John Smith"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qualification">Qualification<span class="required">*</span></label>
+                            <input 
+                                type="text" 
+                                id="qualification" 
+                                placeholder="MBBS, MD, MS"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="registrationNumber">Registration Number<span class="required">*</span></label>
+                            <input 
+                                type="text" 
+                                id="registrationNumber" 
+                                placeholder="MCI/State Reg. No."
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="form-section">
+                    <div class="section-title">Professional Information</div>
+                    
+                    <div class="form-group">
+                        <label for="hospitalName">Hospital/Clinic Name<span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="hospitalName" 
+                            placeholder="Enter hospital or clinic name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobileNumber">Mobile Number<span class="required">*</span></label>
+                            <input 
+                                type="tel" 
+                                id="mobileNumber" 
+                                placeholder="+91 9876543210"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailId">Email Address<span class="required">*</span></label>
+                            <input 
+                                type="email" 
+                                id="emailId" 
+                                placeholder="doctor@hospital.com"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Security -->
+                <div class="form-section">
+                    <div class="section-title">Account Security</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password<span class="required">*</span></label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                placeholder="Minimum 8 characters"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password<span class="required">*</span></label>
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                placeholder="Re-enter password"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Complete Registration</button>
+
+                <div class="form-footer">
+                    Already registered? <a href="#">Login Here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+    <script type="module">
+        // Admin registration + sign-in using Firebase Auth + role check in Firestore
+    import { auth, db } from '../../firebase.js';
+        import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js';
+        import { doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js';
+
+        // ----- Admin login -----
+        const btn = document.getElementById('adminLoginBtn');
+        btn.addEventListener('click', async () => {
+            const emailInput = document.getElementById('adminEmailMobile');
+            const passwordInput = document.getElementById('adminPassword');
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const uid = userCredential.user.uid;
+
+                // Check role from Firestore users collection
+                const userDocRef = doc(db, 'users', uid);
+                const snap = await getDoc(userDocRef);
+                if (snap.exists() && snap.data().role === 'admin') {
+                    window.location.href = '../../Adminpanel/dashboard.html';
+                } else {
+                    // Not an admin (or no role set)
+                    alert('This account is not an admin. Redirecting to user home.');
+                    window.location.href = '../../Home/index.html';
+                }
+            } catch (err) {
+                console.error('Admin sign-in failed', err);
+                alert('Sign-in failed: ' + (err.message || err));
+            }
+        });
+
+        // ----- Admin registration (creates auth user + users doc with role='admin') -----
+        const regForm = document.querySelector('#doctor-registration-modal form');
+        if (regForm) {
+            regForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('doctorName').value.trim();
+                const qualification = document.getElementById('qualification').value.trim();
+                const registrationNumber = document.getElementById('registrationNumber').value.trim();
+                const hospitalName = document.getElementById('hospitalName').value.trim();
+                const mobileNumber = document.getElementById('mobileNumber').value.trim();
+                const email = document.getElementById('emailId').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (!name || !email || !password) {
+                    alert('Please fill name, email and password');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                try {
+                    // Create auth user
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    const uid = cred.user.uid;
+
+                    // Save profile in Firestore under users/{uid}
+                    await setDoc(doc(db, 'users', uid), {
+                        name,
+                        qualification,
+                        registrationNumber,
+                        hospitalName,
+                        mobileNumber,
+                        email,
+                        role: 'admin',
+                        createdAt: new Date().toISOString()
+                    });
+
+                    alert('Registration successful. You can now sign in as admin.');
+                    // Close modal by clearing hash if opened via anchor (#doctor-registration-modal)
+                    if (window.location.hash === '#doctor-registration-modal') window.location.hash = '';
+                    regForm.reset();
+                } catch (err) {
+                    console.error('Registration failed', err);
+                    alert('Registration failed: ' + (err.message || err));
+                }
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Care</title>
+    <style>
+        :root { --primary-color:#0ea5e9; --primary-dark:#0284c7; --primary-light:#bae6fd; --text-primary:#1f2937; --text-secondary:#6b7280; --text-tertiary:#9ca3af; --bg-primary:#ffffff; --bg-secondary:#f9fafb; --bg-tertiary:#f5f7fb; --border-color:#e5e7eb; --shadow-sm:0 1px 3px rgba(0,0,0,0.05); --sidebar-width:280px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-tertiary);color:var(--text-primary)}
+        .sidebar{width:var(--sidebar-width);background:#1a1d2e;color:white;padding:30px 0;position:fixed;height:100vh}
+        .logo{padding:0 30px;margin-bottom:50px;display:flex;align-items:center;gap:12px;font-size:1.5em;font-weight:600}
+        .nav-item{padding:14px 30px;display:flex;align-items:center;gap:15px;color:var(--text-tertiary);text-decoration:none}
+        .nav-item:hover{background:rgba(14,165,233,.1);color:#fff}
+        .nav-item.active{background:rgba(14,165,233,.15);color:#fff;border-left:3px solid var(--primary-color)}
+        .main-content{margin-left:var(--sidebar-width);padding:30px 40px}
+        .card{background:var(--bg-primary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+        .card-title{font-size:1.2em;font-weight:600;margin-bottom:12px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+        .pill{padding:14px;border-radius:12px;background:var(--bg-secondary)}
+        .label{color:var(--text-secondary);font-size:.9em;margin-bottom:6px}
+        .value{font-size:1.6em;font-weight:700}
+        .bars{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:10px}
+        .bar{display:flex;flex-direction:column;align-items:center;gap:8px}
+        .bar-box{width:100%;height:140px;background:var(--bg-secondary);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
+        .fill{width:100%;background:linear-gradient(180deg,var(--primary-light),var(--primary-color))}
+        .label-sm{font-size:12px;color:var(--text-secondary)}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><span class="logo-icon">🏥</span><span>Care</span></div>
+        <div class="nav-section">
+            <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+            <a class="nav-item" href="appointments.html">📅 Appointments</a>
+            <a class="nav-item" href="patients.html">👥 My Patients</a>
+            <a class="nav-item" href="reviews.html">⭐ Reviews</a>
+            <a class="nav-item" href="earnings.html">💰 Earnings</a>
+            <a class="nav-item active" href="analytics.html">📈 Analytics</a>
+            <a class="nav-item" href="profile.html">👤 My Profile</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Key Metrics</div>
+            <div class="grid">
+                <div class="pill"><div class="label">Total Patients</div><div id="mPatients" class="value">0</div></div>
+                <div class="pill"><div class="label">Appointments (This Month)</div><div id="mAppts" class="value">0</div></div>
+                <div class="pill"><div class="label">Completion Rate</div><div id="mComplete" class="value">0%</div></div>
+                <div class="pill"><div class="label">Avg/day (7d)</div><div id="mAvg" class="value">0</div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Next 7 Days Appointments</div>
+            <div id="bars" class="bars"></div>
+        </div>
+    </div>
+    <script>
+        function getStore(k,f){ try{return JSON.parse(localStorage.getItem(k))||f;}catch{return f;} }
+        function load(){
+            const patients=getStore('patients',[]);
+            const appts=getStore('appointments',[]);
+            document.getElementById('mPatients').textContent=patients.length;
+            const now=new Date(); const month=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+            const monthAppts=appts.filter(a=>a.date.startsWith(month));
+            document.getElementById('mAppts').textContent=monthAppts.length;
+            const completed=monthAppts.filter(a=>a.status==='completed').length;
+            const completionRate=monthAppts.length? Math.round((completed/monthAppts.length)*100):0;
+            document.getElementById('mComplete').textContent=completionRate+'%';
+            // Next 7 days
+            const days=[]; const today=new Date();
+            for(let i=0;i<7;i++){ const d=new Date(today); d.setDate(today.getDate()+i); days.push(d); }
+            const bars=document.getElementById('bars'); bars.innerHTML='';
+            let total=0;
+            days.forEach(d=>{
+                const iso=d.toISOString().slice(0,10);
+                const count=appts.filter(a=>a.date===iso).length; total+=count;
+                const wrap=document.createElement('div'); wrap.className='bar';
+                wrap.innerHTML=`<div class="bar-box"><div class="fill" style="height:${Math.min(100, count*20)}%"></div></div><div class="label-sm">${d.toLocaleDateString(undefined,{weekday:'short'})}</div><div class="label-sm">${count}</div>`;
+                bars.appendChild(wrap);
+            });
+            document.getElementById('mAvg').textContent=(total/7).toFixed(1);
+        }
+        load();
+    </script>
+</body>
+</html>
+
+

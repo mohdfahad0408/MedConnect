@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Patients - Care</title>
+    <style>
+        :root { --primary-color:#0ea5e9; --primary-dark:#0284c7; --primary-light:#bae6fd; --text-primary:#1f2937; --text-secondary:#6b7280; --text-tertiary:#9ca3af; --bg-primary:#ffffff; --bg-secondary:#f9fafb; --bg-tertiary:#f5f7fb; --border-color:#e5e7eb; --shadow-sm:0 1px 3px rgba(0,0,0,0.05); --sidebar-width:280px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-tertiary);color:var(--text-primary)}
+        .sidebar{width:var(--sidebar-width);background:#1a1d2e;color:white;padding:30px 0;position:fixed;height:100vh}
+        .logo{padding:0 30px;margin-bottom:50px;display:flex;align-items:center;gap:12px;font-size:1.5em;font-weight:600}
+        .nav-item{padding:14px 30px;display:flex;align-items:center;gap:15px;color:var(--text-tertiary);text-decoration:none}
+        .nav-item:hover{background:rgba(14,165,233,.1);color:#fff}
+        .nav-item.active{background:rgba(14,165,233,.15);color:#fff;border-left:3px solid var(--primary-color)}
+        .main-content{margin-left:var(--sidebar-width);padding:30px 40px}
+        .card{background:var(--bg-primary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+        .card-title{font-size:1.2em;font-weight:600;margin-bottom:12px}
+        .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+        input,select{padding:10px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:14px;background:#fff}
+        .btn{background:var(--primary-color);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer}
+        table{width:100%;border-collapse:separate;border-spacing:0 8px}
+        th,td{text-align:left;padding:10px 12px}
+        th{color:var(--text-secondary);font-weight:600}
+        tbody tr{background:#fff}
+        .row-actions button{margin-right:8px}
+        .search{margin-bottom:10px}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><span class="logo-icon">🏥</span><span>Care</span></div>
+        <div class="nav-section">
+            <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+            <a class="nav-item" href="appointments.html">📅 Appointments</a>
+            <a class="nav-item active" href="patients.html">👥 My Patients</a>
+            <a class="nav-item" href="reviews.html">⭐ Reviews</a>
+            <a class="nav-item" href="earnings.html">💰 Earnings</a>
+            <a class="nav-item" href="analytics.html">📈 Analytics</a>
+            <a class="nav-item" href="profile.html">👤 My Profile</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Add / Edit Patient</div>
+            <div class="form-row">
+                <input id="name" placeholder="Full name">
+                <input id="age" type="number" placeholder="Age">
+                <select id="gender">
+                    <option value="">Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+                <input id="phone" placeholder="Phone">
+            </div>
+            <div style="margin-top:12px">
+                <button id="saveBtn" class="btn">Save Patient</button>
+                <button id="resetBtn" class="btn" style="background:#9ca3af">Reset</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Patients</div>
+            <input id="search" class="search" placeholder="Search by name or phone">
+            <table>
+                <thead>
+                    <tr><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="patientsBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const idInput = { current:null };
+        function getStore(key, fallback){ try{ return JSON.parse(localStorage.getItem(key))||fallback;}catch{return fallback;} }
+        function setStore(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+        function uid(prefix){ return prefix+Math.random().toString(36).slice(2,9); }
+
+        function load(){
+            const search = (document.getElementById('search').value||'').toLowerCase();
+            const patients = getStore('patients',[]).filter(p=> p.name.toLowerCase().includes(search) || (p.phone||'').toLowerCase().includes(search));
+            const tbody = document.getElementById('patientsBody');
+            tbody.innerHTML='';
+            patients.forEach(p=>{
+                const tr=document.createElement('tr');
+                tr.innerHTML = `<td>${p.name}</td><td>${p.age||''}</td><td>${p.gender||''}</td><td>${p.phone||''}</td>
+                                <td class="row-actions">
+                                    <button class="btn" style="background:#0284c7" data-edit="${p.id}">Edit</button>
+                                    <button class="btn" style="background:#ef4444" data-del="${p.id}">Delete</button>
+                                </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function save(){
+            const name=document.getElementById('name').value.trim();
+            const age=parseInt(document.getElementById('age').value||'');
+            const gender=document.getElementById('gender').value;
+            const phone=document.getElementById('phone').value.trim();
+            if(!name){ alert('Name is required'); return; }
+            const patients=getStore('patients',[]);
+            if(idInput.current){
+                const idx=patients.findIndex(p=>p.id===idInput.current);
+                if(idx>=0){ patients[idx]={...patients[idx],name,age,gender,phone}; }
+            }else{
+                patients.push({id:uid('p'),name,age,gender,phone});
+            }
+            setStore('patients',patients);
+            resetForm();
+            load();
+        }
+
+        function resetForm(){ idInput.current=null; ['name','age','gender','phone'].forEach(id=>document.getElementById(id).value=''); }
+
+        document.getElementById('patientsBody').addEventListener('click',e=>{
+            const del=e.target.getAttribute('data-del');
+            const edit=e.target.getAttribute('data-edit');
+            const patients=getStore('patients',[]);
+            if(del){
+                if(confirm('Delete this patient?')){
+                    const usedAppts=(getStore('appointments',[]).some(a=>a.patientId===del));
+                    if(usedAppts){ alert('Cannot delete patient with existing appointments'); return; }
+                    setStore('patients',patients.filter(p=>p.id!==del)); load();
+                }
+            }
+            if(edit){
+                const p=patients.find(x=>x.id===edit); if(!p) return;
+                idInput.current=p.id; document.getElementById('name').value=p.name; document.getElementById('age').value=p.age||''; document.getElementById('gender').value=p.gender||''; document.getElementById('phone').value=p.phone||'';
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click',save);
+        document.getElementById('resetBtn').addEventListener('click',resetForm);
+        document.getElementById('search').addEventListener('input',load);
+        (function seed(){ if(!localStorage.getItem('patients')){ setStore('patients',[{id:'p1',name:'Sarah Johnson',age:29,gender:'Female',phone:'555-0101'}]); }})();
+        load();
+    </script>
+</body>
+</html>
+
+

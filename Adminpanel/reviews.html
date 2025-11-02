@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews - Care</title>
+    <style>
+        :root { --primary-color:#0ea5e9; --primary-dark:#0284c7; --primary-light:#bae6fd; --text-primary:#1f2937; --text-secondary:#6b7280; --text-tertiary:#9ca3af; --bg-primary:#ffffff; --bg-secondary:#f9fafb; --bg-tertiary:#f5f7fb; --border-color:#e5e7eb; --shadow-sm:0 1px 3px rgba(0,0,0,0.05); --sidebar-width:280px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-tertiary);color:var(--text-primary)}
+        .sidebar{width:var(--sidebar-width);background:#1a1d2e;color:white;padding:30px 0;position:fixed;height:100vh}
+        .logo{padding:0 30px;margin-bottom:50px;display:flex;align-items:center;gap:12px;font-size:1.5em;font-weight:600}
+        .nav-item{padding:14px 30px;display:flex;align-items:center;gap:15px;color:var(--text-tertiary);text-decoration:none}
+        .nav-item:hover{background:rgba(14,165,233,.1);color:#fff}
+        .nav-item.active{background:rgba(14,165,233,.15);color:#fff;border-left:3px solid var(--primary-color)}
+        .main-content{margin-left:var(--sidebar-width);padding:30px 40px}
+        .card{background:var(--bg-primary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+        .card-title{font-size:1.2em;font-weight:600;margin-bottom:12px}
+        .review{background:var(--bg-secondary);padding:16px;border-radius:12px;margin-bottom:12px}
+        .review-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+        .reviewer{display:flex;align-items:center;gap:10px}
+        .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--primary-light))}
+        .actions{display:flex;gap:8px;margin-top:8px}
+        .btn{padding:8px 12px;border:2px solid var(--border-color);background:#fff;border-radius:8px;cursor:pointer;font-weight:600}
+        .reply-box{margin-top:10px}
+        .reply-box textarea{width:100%;padding:10px;border:2px solid var(--border-color);border-radius:8px}
+    </style>
+    </head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><span class="logo-icon">🏥</span><span>Care</span></div>
+        <div class="nav-section">
+            <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+            <a class="nav-item" href="appointments.html">📅 Appointments</a>
+            <a class="nav-item" href="patients.html">👥 My Patients</a>
+            <a class="nav-item active" href="reviews.html">⭐ Reviews</a>
+            <a class="nav-item" href="earnings.html">💰 Earnings</a>
+            <a class="nav-item" href="analytics.html">📈 Analytics</a>
+            <a class="nav-item" href="profile.html">👤 My Profile</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Recent Reviews</div>
+            <div id="reviews"></div>
+        </div>
+    </div>
+    <script>
+        function getStore(k,f){ try{return JSON.parse(localStorage.getItem(k))||f;}catch{return f;} }
+        function setStore(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+        (function seed(){
+            if(!localStorage.getItem('reviews')){
+                setStore('reviews',[                    {id:'r3',name:'Priya Sharma',rating:4,text:'Good experience, a bit of wait time.',helpful:5,reply:''},
+                    {id:'r4',name:'Amit Verma',rating:5,text:'Very attentive and knowledgeable. Highly recommended.',helpful:7,reply:''},
+                    {id:'r5',name:'Emily Davis',rating:4,text:'Friendly staff and clean clinic. Satisfied with the treatment.',helpful:6,reply:''},
+                    {id:'r6',name:'Raj Patel',rating:5,text:'Quick diagnosis and effective medication regimen.',helpful:9,reply:''},
+                    {id:'r7',name:'Olivia Wilson',rating:5,text:'Explained everything with patience. Great experience.',helpful:10,reply:''},
+                    {id:'r8',name:'Daniel Martinez',rating:4,text:'Appointment started a bit late but great care overall.',helpful:3,reply:''},
+                    {id:'r9',name:'Sophia Lee',rating:5,text:'Top-notch professionalism and bedside manner.',helpful:11,reply:''},
+                    {id:'r10',name:'Noah Brown',rating:5,text:'Efficient and caring throughout the process.',helpful:4,reply:''},
+                    {id:'r11',name:'Aarav Singh',rating:4,text:'Good consultation, would visit again.',helpful:2,reply:''},
+                    {id:'r12',name:'Mia Johnson',rating:5,text:'Felt heard and supported. Thank you!',helpful:8,reply:''},
+                    {id:'r13',name:'Liam Garcia',rating:5,text:'Clear guidance for recovery. Much appreciated.',helpful:5,reply:''},
+                    {id:'r14',name:'Isabella Thomas',rating:4,text:'Nice experience. Parking was a bit tricky.',helpful:1,reply:''},
+                    {id:'r15',name:'Ethan Walker',rating:5,text:'Very skilled and empathetic doctor.',helpful:6,reply:''},
+                    {id:'r16',name:'Aisha Khan',rating:5,text:'Smooth process from check-in to follow-up.',helpful:7,reply:''},
+                    {id:'r17',name:'Harper Moore',rating:4,text:'Good service and helpful staff.',helpful:3,reply:''},
+                    {id:'r18',name:'Zara Ali',rating:5,text:'Exceptional treatment and clear instructions.',helpful:9,reply:''},
+                    {id:'r19',name:'William Scott',rating:5,text:'Went above and beyond to help.',helpful:4,reply:''},
+                    {id:'r20',name:'Arjun Mehta',rating:4,text:'Consultation was thorough. Slight wait time.',helpful:2,reply:''},
+                    {id:'r21',name:'Chloe Nguyen',rating:5,text:'Super kind and very professional.',helpful:6,reply:''},
+                    {id:'r22',name:'Henry Adams',rating:5,text:'Quick recovery thanks to the right plan.',helpful:5,reply:''},
+                    {id:'r23',name:'Ananya Gupta',rating:5,text:'Great listener and expert advice.',helpful:7,reply:''},
+                    {id:'r24',name:'Marcus Turner',rating:5,text:'Outstanding care and follow-through.',helpful:6,reply:''},
+                    {id:'r25',name:'Neha Agarwal',rating:4,text:'Consultation was helpful and detailed.',helpful:3,reply:''},
+                    {id:'r26',name:'Pedro Alvarez',rating:5,text:'Very reassuring and clear about next steps.',helpful:4,reply:''},
+                    {id:'r27',name:'Julia Roberts',rating:5,text:'Fantastic experience, highly recommended.',helpful:8,reply:''},
+                    {id:'r28',name:'Kabir Das',rating:4,text:'Wait time could improve, but great doctor.',helpful:2,reply:''},
+                    {id:'r29',name:'Amelia Clark',rating:5,text:'Made me feel very comfortable.',helpful:5,reply:''},
+                    {id:'r30',name:'Yusuf Khan',rating:5,text:'Excellent diagnosis and treatment plan.',helpful:7,reply:''},
+                    {id:'r31',name:'Grace Miller',rating:4,text:'Good experience overall.',helpful:3,reply:''},
+                    {id:'r32',name:'Evelyn Brooks',rating:5,text:'Kind, patient, and thorough.',helpful:6,reply:''},
+                    {id:'r33',name:'Ishan Roy',rating:5,text:'Quick appointment and clear instructions.',helpful:4,reply:''},
+                    {id:'r34',name:'Natalie Perez',rating:5,text:'Staff was welcoming and efficient.',helpful:5,reply:''},
+                    {id:'r35',name:'Victor Ramos',rating:4,text:'Quality care, will return.',helpful:2,reply:''},
+                    {id:'r36',name:'Hannah Kim',rating:5,text:'Everything was smooth and professional.',helpful:6,reply:''},
+                    {id:'r37',name:'Aria Shah',rating:5,text:'Felt truly cared for.',helpful:7,reply:''},
+                    {id:'r38',name:'Logan White',rating:4,text:'Great visit, minor delay.',helpful:1,reply:''},
+                    {id:'r39',name:'Priyanka Desai',rating:5,text:'Empathetic and highly skilled.',helpful:8,reply:''},
+                    {id:'r40',name:'Benjamin Lee',rating:5,text:'Would recommend to friends and family.',helpful:5,reply:''},
+                    {id:'r41',name:'Riya Nair',rating:4,text:'Helpful consultation and tips.',helpful:2,reply:''},
+                    {id:'r42',name:'Jacob Wilson',rating:5,text:'Super efficient and friendly.',helpful:4,reply:''},
+                    {id:'r43',name:'Sofia Patel',rating:5,text:'Went the extra mile to help.',helpful:6,reply:''}
+                ]);
+            }
+        })();
+        function render(){
+            const list=getStore('reviews',[]);
+            const c=document.getElementById('reviews');
+            c.innerHTML='';
+            list.forEach(r=>{
+                const div=document.createElement('div');
+                div.className='review';
+                const stars='★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
+                div.innerHTML = `<div class="review-head">
+                    <div class="reviewer"><div class="avatar"></div><div><div style="font-weight:600">${r.name}</div><div style="color:#fbbf24">${stars}</div></div></div>
+                    <div style="color:var(--text-secondary);font-size:12px">${r.id}</div>
+                </div>
+                <div>${r.text}</div>
+                ${r.reply?`<div style="margin-top:10px;padding:10px;background:#f3f0ff;border-left:3px solid var(--primary-color);border-radius:8px"><strong>Your reply:</strong> ${r.reply}</div>`:''}
+                <div class="actions">
+                    <button class="btn" data-helpful="${r.id}">👍 Helpful (${r.helpful})</button>
+                    <button class="btn" data-reply="${r.id}">${r.reply?'Edit Reply':'💬 Reply'}</button>
+                    <button class="btn" data-delete="${r.id}" style="border-color:#ef4444;color:#ef4444">Delete</button>
+                </div>`;
+                c.appendChild(div);
+            });
+        }
+        document.getElementById('reviews').addEventListener('click', e=>{
+            const help=e.target.getAttribute('data-helpful');
+            const rep=e.target.getAttribute('data-reply');
+            const del=e.target.getAttribute('data-delete');
+            if(!help && !rep && !del) return;
+            const list=getStore('reviews',[]);
+            if(help){ const idx=list.findIndex(x=>x.id===help); if(idx>=0){ list[idx].helpful++; setStore('reviews',list); render(); } }
+            if(del){ if(confirm('Delete this review?')){ setStore('reviews', list.filter(x=>x.id!==del)); render(); } }
+            if(rep){
+                const idx=list.findIndex(x=>x.id===rep); if(idx<0) return;
+                const reply=prompt('Enter your reply:', list[idx].reply||'');
+                if(reply!==null){ list[idx].reply=reply.trim(); setStore('reviews',list); render(); }
+            }
+        });
+        render();
+    </script>
+</body>
+</html>
+
+

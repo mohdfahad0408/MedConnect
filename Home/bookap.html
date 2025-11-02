@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Doctors</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .nav {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .btn-primary {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        .nav-link.active {
+            background-color: #e5e5e5;
+            color: #333;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 16px 40px 0 40px;
+            flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 10px 12px;
+            border: 2px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn-primary {
+            background-color: #0ea5e9;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0284c7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .doctors-list {
+                order: 1;
+            }
+        }
+
+        .sidebar {
+            background-color: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .filter-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .filter-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .clear-filters {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .clear-filters:hover {
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+        }
+
+        .doctors-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 1200px) {
+            .doctors-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .doctors-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .doctor-card {
+            background-color: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 600px) {
+            .doctor-card {
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .doctor-card {
+                flex-direction: column;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .doctor-card {
+                flex-direction: row;
+            }
+        }
+
+        .doctor-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            object-fit: cover;
+            background-color: #e5e5e5;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 599px) {
+            .doctor-image {
+                width: 80px;
+                height: 80px;
+                align-self: center;
+            }
+        }
+
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .doctor-image {
+                width: 100%;
+                height: 150px;
+                align-self: center;
+            }
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .doctor-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .verified-badge {
+            color: #0ea5e9;
+            font-size: 18px;
+        }
+
+        .specialty {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .rating-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-icon {
+            color: #999;
+        }
+
+        .available-slots {
+            margin-top: 12px;
+        }
+
+        .slots-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .time-slots {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .time-slot {
+            padding: 8px 16px;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .btn-book {
+            background-color: #0ea5e9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-book:hover {
+            background-color: #0284c7;
+        }
+
+        .star-empty {
+            color: #d1d5db;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+                <span class="bi-heart-pulse-fill"></span>MedConnect
+        </div>
+        <nav class="nav">
+            <a href="/Home/index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link active">Doctors</a>
+            <a href="/Home/myappoint.html" class="nav-link">My Appointments</a>
+            <a href="/Home/healthtv.html" class="nav-link">Health TV</a>
+            
+        </nav>
+    </header>
+    <div class="search-bar">
+        <input id="searchInput" type="text" placeholder="Search by doctor, specialty, or hospital" style="flex:1; min-width: 220px;">
+        <select id="locationSelect">
+            <option>Select Location</option>
+            <option>Lucknow</option>
+            <option>Gorakhpur</option>
+            <option>Kanpur</option>
+            <option>Sultanpur</option>
+            <option>Ghaziabad</option>
+        </select>
+        <button id="searchButton" class="btn-primary">Search</button>
+    </div>
+    <div class="container">
+
+        <main class="doctors-list">
+            <!-- Doctor 1 -->
+            <div class="doctor-card" data-specialty="pediatrics" data-city="Lucknow" data-hospital="Medanta Hospital">
+                <img src="https://tech-shivendra.github.io/portfolio/WhatsApp%20Image%202025-10-12%20at%2016.58.36.jpeg" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Shivendra Pratap Singh</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Pediatrics</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.9 (203 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>18 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Medanta Hospital , Lucknow</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">10:30 AM</span>
+                            <span class="time-slot">1:00 PM</span>
+                            <span class="time-slot">3:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="doctor-card" data-specialty="orthopedics" data-city="Gorakhpur" data-hospital="City Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQGMyXwG_3J3fA/profile-displayphoto-scale_400_400/B56ZjxUsI_HIAg-/0/1756395391798?e=1763596800&v=beta&t=wlKKqBPFlfdGv_Y0uroyi4KDIdskIcV4sCkBxlz7dM8" alt="Dr. Siddharth" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Siddharth Gupta</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Orthopedics</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.7 (98 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>20 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>City Hospital , Gorakhpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">9:30 AM</span>
+                            <span class="time-slot">2:30 PM</span>
+                            <span class="time-slot">5:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 3 -->
+            <div class="doctor-card" data-specialty="dermatology" data-city="Lucknow" data-hospital="CNS Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D4E03AQFp_84sSy3x7g/profile-displayphoto-scale_400_400/B4EZj.4cctHEAk-/0/1756622866856?e=1763596800&v=beta&t=-lmhAIPpbS71aZ6W74FNh33EyQ9aBjQ2A_9JngAa2no" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Ansh Pratap Rao</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Dermatology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.8 (134 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>10 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>CNS Hospital , Lucknow</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">11:00 AM</span>
+                            <span class="time-slot">2:00 PM</span>
+                            <span class="time-slot">4:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 4 -->
+            <div class="doctor-card" data-specialty="ophthalmology" data-city="Sultanpur" data-hospital="City Clinic">
+                <img src="https://media.licdn.com/dms/image/v2/D4E03AQE8WA_RykVPAA/profile-displayphoto-crop_800_800/B4EZmjpKCpHoAI-/0/1759387100695?e=1763596800&v=beta&t=6FfLhuOJG9NO58wc2gSL1io2pEBwzINkSPEHWKQLJzg" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Fahad</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Ophthalmology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">5.0 (92 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>12 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>City Clinic,Sultanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">9:00 AM</span>
+                            <span class="time-slot">12:00 PM</span>
+                            <span class="time-slot">3:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 4 -->
+            <div class="doctor-card" data-specialty="cardiology" data-city="Kanpur" data-hospital="Aryavarta Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D4D03AQGMtAvdBsAHCw/profile-displayphoto-shrink_400_400/B4DZb3Cr.dGkAg-/0/1747901403402?e=1763596800&v=beta&t=VegHSeZ1qbWPEgYj2lXMYy1XXUSftdNCugvJ0S9qQAE" alt="Dr.Ayush" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Ayush </h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Cardiology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">4.9 (287 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>25 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Aryavarta Hospital , Kanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">8:00 AM</span>
+                            <span class="time-slot">11:30 AM</span>
+                            <span class="time-slot">3:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 5 -->
+            <div class="doctor-card" data-specialty="neurology" data-city="Sultanpur" data-hospital="Aastha Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D4E03AQH66naZXBzJhw/profile-displayphoto-crop_800_800/B4EZo5x.OCHUAM-/0/1761905994771?e=1763596800&v=beta&t=sTrXDiCLYHvny4kC8ow3GMK3g66A85NjKCydpJR6RHk" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Himanshu</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Neurology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.7 (156 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>15 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Aastha Hospital , Sultanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">10:00 AM</span>
+                            <span class="time-slot">1:30 PM</span>
+                            <span class="time-slot">4:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 4 -->
+            <div class="doctor-card" data-specialty="cardiology" data-city="Kanpur" data-hospital="Aryavarta Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D4D03AQGMtAvdBsAHCw/profile-displayphoto-shrink_400_400/B4DZb3Cr.dGkAg-/0/1747901403402?e=1763596800&v=beta&t=VegHSeZ1qbWPEgYj2lXMYy1XXUSftdNCugvJ0S9qQAE" alt="Dr.Ayush" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Ayush </h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Cardiology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">4.9 (287 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>25 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Aryavarta Hospital , Kanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">8:00 AM</span>
+                            <span class="time-slot">11:30 AM</span>
+                            <span class="time-slot">3:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 7 -->
+            <div class="doctor-card" data-specialty="pediatrics" data-city="Sultanpur" data-hospital="City Clinic">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFyi0fjlnqZDQ/profile-displayphoto-scale_400_400/B56ZhuGY2jHMAk-/0/1754193827963?e=1763596800&v=beta&t=OHYzCPlitlr74sydX5Z8b3YzZ2d2w14YgiBbyjRpaxw" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr.Abhinav Dwiwedi</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Pediatrics</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.8 (178 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>14 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>City Clinic , Sultanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">8:30 AM</span>
+                            <span class="time-slot">11:00 AM</span>
+                            <span class="time-slot">2:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 8 -->
+            <div class="doctor-card" data-specialty="orthopedics" data-city="Lucknow" data-hospital="Maxx Medicity">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQEX-nfzZMcxcw/profile-displayphoto-shrink_400_400/B56ZUiTbwFGUAg-/0/1740037276618?e=1763596800&v=beta&t=DjKqNGzjjyntP3R4o5NRSsS8R76JezgKaBwAF5_AAy0" alt="Dr. Usama " class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Usama Amin</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Orthopedics</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.6 (124 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>22 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Maxx Medicity , Lucknow</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">7:30 AM</span>
+                            <span class="time-slot">10:30 AM</span>
+                            <span class="time-slot">2:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 9 -->
+            <div class="doctor-card" data-specialty="cardiology" data-city="Kanpur" data-hospital="HealthhCity">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLwxguG9C2lg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1703869693682?e=1763596800&v=beta&t=bxolJKhwTKO11BEHcCmSAQXbFm2HJMdI2nKlvlfWDlo" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Natasha Dahiya</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Cardiology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.7 (201 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>16 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>HealthhCity,Kanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">9:30 AM</span>
+                            <span class="time-slot">1:00 PM</span>
+                            <span class="time-slot">4:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor 10 -->
+            <div class="doctor-card" data-specialty="endocrinology" data-city="Kanpur" data-hospital="MediCare General Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/C5103AQGRwjdLkfeLnA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1543062072886?e=1763596800&v=beta&t=q8kX0igqQQhW2OCsm-vGztlXTXztlRtUh-SkCYY9yT8" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Chetan Sharma</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Endocrinology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.6 (142 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>11 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>MediCare General Hospital, Kanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">9:15 AM</span>
+                            <span class="time-slot">12:45 PM</span>
+                            <span class="time-slot">4:15 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 11 -->
+            <div class="doctor-card" data-specialty="gastroenterology" data-city="Sultanpur" data-hospital="Civil Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQHFpIipQ4CVuA/profile-displayphoto-crop_800_800/B56ZgO_6YXHMAM-/0/1752598293554?e=1763596800&v=beta&t=f_lhrmb5qONI7GIgzSIkgtDBURgCEbepyIX5TPkfWRY" alt="Dr. Utpal" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Utpal Tripathi</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Gastroenterology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">4.9 (176 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>17 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Civil Hospital, Sultanpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">10:00 AM</span>
+                            <span class="time-slot">1:00 PM</span>
+                            <span class="time-slot">3:30 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 12 -->
+            <div class="doctor-card" data-specialty="psychiatry" data-city="Ghaziabad" data-hospital="City Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQHRjYavhrMEmw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1725247513600?e=1763596800&v=beta&t=p7jDfbp6O6wZiLzPuXYW0D1lC5QjY2MJWc-dqwltCRc" alt="Dr. Saundarya" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Saundarya Deepak</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Psychiatry</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.7 (201 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>9 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>City Hospital, Ghaziabad</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">8:45 AM</span>
+                            <span class="time-slot">1:15 PM</span>
+                            <span class="time-slot">5:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 13 -->
+            <div class="doctor-card" data-specialty="urology" data-city="Lucknow" data-hospital="Canvas Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFhhhFe0XVKLw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1728274462723?e=1763596800&v=beta&t=Dd6pBoaqanOB-8TblwdYnhJuXcqgUkksUVBQHpCpTpo" alt="Dr. Nida" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Nida Tauheed</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Urology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.5 (89 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>13 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Canvas Hospital , Lucknow</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">9:00 AM</span>
+                            <span class="time-slot">12:30 PM</span>
+                            <span class="time-slot">4:00 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 14 -->
+            <div class="doctor-card" data-specialty="pulmonology" data-city="Ghaziabad" data-hospital="Apollo Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQEFfxKZ8F1c9w/profile-displayphoto-crop_800_800/B56Zoq0VFNHkAI-/0/1761654969999?e=1763596800&v=beta&t=nYrY6M-5RV1-SbEsr9-HBKhDphOMo8J2ayTblyNTrUA" alt="Dr. Azam" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Azam Khan</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Pulmonology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">5.0 (64 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>8 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Apollo Hospital, Ghaziabad</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">10:45 AM</span>
+                            <span class="time-slot">2:15 PM</span>
+                            <span class="time-slot">5:15 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 15 -->
+            <div class="doctor-card" data-specialty="rheumatology" data-city="Gorakhpur" data-hospital="Healthcare Hospital">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQEfIiFS2FwVNQ/profile-displayphoto-shrink_400_400/B56ZRAdtJeGsAk-/0/1736248317410?e=1763596800&v=beta&t=9IO15_cmie1R8Vx2Id-d-tQ3T6Ry0V3ol8UBvzvjPaw" alt="Dr. Alakh" class="doctor-image">
+                <div class="doctor-info">
+                    <div class="doctor-header">
+                        <h2 class="doctor-name">Dr. Alakh Pandey</h2>
+                        <span class="verified-badge">✓</span>
+                    </div>
+                    <p class="specialty">Rheumatology</p>
+                    <div class="rating">
+                        <span class="stars">★★★★</span><span class="star-empty">★</span>
+                        <span class="rating-text">4.6 (112 reviews)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span>10 years experience</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>Healthcare Hospital,Gorakhpur</span>
+                    </div>
+                    <div class="available-slots">
+                        <div class="slots-label">Available Slots:</div>
+                        <div class="time-slots">
+                            <span class="time-slot">8:30 AM</span>
+                            <span class="time-slot">1:00 PM</span>
+                            <span class="time-slot">3:45 PM</span>
+                        </div>
+                        <button class="btn-book">📅 Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Top-bar-only filtering
+        const doctorCards = document.querySelectorAll('.doctor-card');
+        const searchInput = document.getElementById('searchInput');
+        const locationSelect = document.getElementById('locationSelect');
+        const searchButton = document.getElementById('searchButton');
+
+        function filterDoctors() {
+            const query = (searchInput.value || '').trim().toLowerCase();
+            const location = (locationSelect.value || '').trim().toLowerCase();
+            const locationUnset = location === '' || location === 'select location';
+
+            doctorCards.forEach(card => {
+                const name = card.querySelector('.doctor-name').textContent.toLowerCase();
+                const specialty = (card.dataset.specialty || '').toLowerCase();
+                const city = (card.dataset.city || '').toLowerCase();
+                const hospital = (card.dataset.hospital || card.querySelector('.info-item:last-of-type span:last-child').textContent).toLowerCase();
+
+                const matchesQuery = query === '' ||
+                    name.includes(query) ||
+                    specialty.includes(query) ||
+                    hospital.includes(query);
+
+                const matchesLocation = locationUnset || city.includes(location);
+
+                card.style.display = (matchesQuery && matchesLocation) ? 'flex' : 'none';
+            });
+        }
+
+        function applyTopSearch() { filterDoctors(); }
+
+        searchButton.addEventListener('click', applyTopSearch);
+        searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') applyTopSearch(); });
+        searchInput.addEventListener('input', filterDoctors);
+        locationSelect.addEventListener('change', filterDoctors);
+
+        // Initial render
+        filterDoctors();
+    </script>
+    <script type="module">
+        // Booking modal + Firestore save
+    import { db } from '../firebase.js';
+    import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js';
+
+        function createModal(doctorName, hospital, slots) {
+            const overlay = document.createElement('div');
+            overlay.style = `position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:2000`;
+
+            const modal = document.createElement('div');
+            modal.style = 'background:white;padding:20px;border-radius:12px;width:420px;max-width:95%;box-shadow:0 10px 30px rgba(0,0,0,0.2)';
+            modal.innerHTML = `
+                <h3 style="margin-bottom:8px">Book appointment with ${doctorName}</h3>
+                <p style="color:#666;margin-bottom:12px">${hospital}</p>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <input id="appt-patient-name" placeholder="Your full name" style="padding:8px;border:1px solid #ddd;border-radius:6px">
+                    <input id="appt-patient-email" type="email" placeholder="Email" style="padding:8px;border:1px solid #ddd;border-radius:6px">
+                    <input id="appt-patient-phone" placeholder="Phone" style="padding:8px;border:1px solid #ddd;border-radius:6px">
+                    <input id="appt-date" type="date" style="padding:8px;border:1px solid #ddd;border-radius:6px">
+                    <select id="appt-time" style="padding:8px;border:1px solid #ddd;border-radius:6px"></select>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+                        <button id="appt-cancel" style="padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:#fff">Cancel</button>
+                        <button id="appt-submit" style="padding:8px 12px;border-radius:6px;border:none;background:#0ea5e9;color:#fff">Confirm</button>
+                    </div>
+                </div>
+            `;
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            const timeSelect = modal.querySelector('#appt-time');
+            slots.forEach(s => {
+                const opt = document.createElement('option'); opt.value = s; opt.textContent = s; timeSelect.appendChild(opt);
+            });
+
+            modal.querySelector('#appt-cancel').addEventListener('click', () => overlay.remove());
+
+            modal.querySelector('#appt-submit').addEventListener('click', async () => {
+                const patientName = modal.querySelector('#appt-patient-name').value.trim();
+                const patientEmail = modal.querySelector('#appt-patient-email').value.trim();
+                const patientPhone = modal.querySelector('#appt-patient-phone').value.trim();
+                const date = modal.querySelector('#appt-date').value;
+                const time = modal.querySelector('#appt-time').value;
+
+                if (!patientName || !patientEmail || !patientPhone || !date || !time) {
+                    alert('Please fill all fields');
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, 'appointments'), {
+                        doctorName,
+                        hospital,
+                        patientName,
+                        patientEmail,
+                        patientPhone,
+                        date,
+                        time,
+                        status: 'pending',
+                        createdAt: serverTimestamp()
+                    });
+                    alert('Appointment requested — you will receive a confirmation soon.');
+                    overlay.remove();
+                } catch (err) {
+                    console.error('Error saving appointment', err);
+                    alert('Could not save appointment — check console for details.');
+                }
+            });
+        }
+
+        // Attach click handlers to Book buttons
+        document.querySelectorAll('.btn-book').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.doctor-card');
+                const doctorName = card.querySelector('.doctor-name').textContent.trim();
+                const hospital = card.dataset.hospital || card.querySelector('.info-item:last-of-type span:last-child')?.textContent || '';
+                const slots = Array.from(card.querySelectorAll('.time-slot')).map(s => s.textContent.trim());
+                createModal(doctorName, hospital, slots);
+            });
+        });
+    </script>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - MedConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0284c7;
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: #0284c7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0284c7;
+            background: #e0f2fe;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0369a1;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: #0284c7;
+            color: #0284c7;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 1rem 1.25rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+            border-radius: 0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            transform: translateY(0);
+            padding-left: 1.5rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .btn-secondary {
+            background: #e0f2fe;
+            color: #0284c7;
+            border-color: #0284c7;
+        }
+
+        /* Hero Section */
+        .hero-faqs {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-faqs h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-faqs p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Box */
+        .search-box {
+            max-width: 700px;
+            margin: -2rem auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        /* FAQ Content */
+        .faq-content {
+            max-width: 900px;
+            margin: 5rem auto;
+            padding: 0 2rem 3rem;
+        }
+
+        .faq-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: #f9fafb;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            background: #e0f2fe;
+            border-color: #0284c7;
+            transform: translateY(-4px);
+        }
+
+        .category-card h3 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-top: 1rem;
+        }
+
+        .category-icon {
+            font-size: 3rem;
+        }
+
+        /* FAQ Items */
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .faq-section h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #0284c7;
+        }
+
+        .faq-item {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: #0284c7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.125rem;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            color: #0284c7;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: #0284c7;
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: #6b7280;
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: #f9fafb;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            color: #6b7280;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .footer-section h4 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-section p {
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .faq-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-faqs h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                MedConnect
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#doctors">Doctors</a>
+                <a href="#appointments">My Appointments</a>
+                <div class="dropdown">
+                    <a href="#signin" class="btn-secondary" style="padding: 0.5rem 1.25rem;">Sign In ▾</a>
+                    <div class="dropdown-content">
+                        <a href="#patient-login">👤 Login as Patient</a>
+                        <a href="#doctor-login">🏥 Login as Hospital/Doctor</a>
+                    </div>
+                </div>
+                <a href="#book" class="btn-primary">Book Appointment</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-faqs">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about MedConnect and our services</p>
+    </section>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text" placeholder="🔍 Search for answers..." id="searchInput">
+    </div>
+
+    <!-- FAQ Content -->
+    <div class="faq-content">
+        <!-- Categories -->
+        <div class="faq-categories">
+            <div class="category-card">
+                <div class="category-icon">📅</div>
+                <h3>Appointments</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">💳</div>
+                <h3>Payments</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">👨‍⚕️</div>
+                <h3>Doctors</h3>
+            </div>
+        </div>
+
+        <!-- General Questions -->
+        <div class="faq-section">
+            <h2>General Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    What is MedConnect?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        MedConnect is a comprehensive healthcare platform that allows patients to easily book appointments with qualified doctors and healthcare professionals. We connect you with over 200+ doctors across various specialties, making healthcare accessible and convenient.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I create an account?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Click on the "Sign In" button in the navigation bar and select "Login as Patient." You'll find a registration option where you can create your account using your email address or phone number. The process takes less than 2 minutes!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is MedConnect available 24/7?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Our platform is available 24/7 for booking appointments and managing your healthcare. While doctor availability varies by specialty and location, our customer support team is always ready to assist you with any questions or concerns.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking & Appointments -->
+        <div class="faq-section">
+            <h2>Booking & Appointments</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I book an appointment?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Booking an appointment is simple! First, choose your preferred doctor or specialty. Then, select an available time slot that fits your schedule. Finally, confirm your booking and receive instant confirmation with all appointment details via email and SMS.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I cancel or reschedule my appointment?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, you can cancel or reschedule your appointment up to 24 hours before the scheduled time without any penalty. Simply go to "My Appointments," select the appointment you wish to modify, and choose the cancel or reschedule option.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    What happens if I'm late for my appointment?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We recommend arriving 10-15 minutes before your scheduled time. If you're running late, please contact the clinic immediately. Depending on the doctor's schedule, they may still be able to see you, though you might experience a longer wait time.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I find a specialist?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        You can browse specialists by department using our "Browse by Department" section on the homepage. We offer specialists in Cardiology, Neurology, Pediatrics, Orthopedics, Dermatology, Ophthalmology, Dentistry, and General Practice. Each department page shows available doctors with their qualifications and patient reviews.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments & Insurance -->
+        <div class="faq-section">
+            <h2>Payments & Insurance</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    What payment methods do you accept?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We accept all major credit cards (Visa, MasterCard, American Express), debit cards, and digital payment methods including PayPal, Apple Pay, and Google Pay. Some clinics also accept insurance - please check with the specific provider during booking.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Do you accept insurance?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Many of our partner doctors and hospitals accept insurance. During the booking process, you'll see which insurance plans are accepted by each provider. You can also filter search results to show only doctors who accept your specific insurance plan.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Will I receive an invoice for my appointment?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, you'll receive a digital invoice via email immediately after your payment is processed. You can also download invoices anytime from your "My Appointments" section for insurance reimbursement or record-keeping purposes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- For Healthcare Providers -->
+        <div class="faq-section">
+            <h2>For Healthcare Providers</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How can I join MedConnect as a doctor or hospital?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Click on "Sign In" and select "Login as Hospital/Doctor" to begin the registration process. You'll need to provide your medical credentials, license information, and clinic details. Our team will review your application within 48 hours and guide you through the onboarding process.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is there a fee to list my practice on MedConnect?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Basic listing is free! We only charge a small service fee per completed appointment. There are no upfront costs, monthly fees, or hidden charges. You only pay when you successfully serve patients through our platform.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I manage my appointment schedule?
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Once registered, you'll have access to a comprehensive dashboard where you can set your availability, block dates, manage appointments, view patient information, and track your earnings. The system is intuitive and can be accessed from any device.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <h2>Still have questions?</h2>
+        <p>Our support team is here to help you</p>
+        <div class="contact-buttons">
+            <a href="#" class="btn-primary">📧 Email Support</a>
+            <a href="#" class="btn-secondary">💬 Live Chat</a>
+            <a href="#" class="btn-secondary">📞 Call Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    MedConnect
+                </div>
+                <p style="color: #d1d5db;">Your trusted partner for quality healthcare and medical appointments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#doctors">Doctors</a></li>
+                    <li><a href="#book">Book Appointment</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Patient Resources</h4>
+                <ul>
+                    <li><a href="#faqs">FAQs</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p>📞 +1 (555) 123-4567</p>
+                <p>✉️ info@medconnect.com</p>
+                <p>📍 123 Health St, Medical City</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

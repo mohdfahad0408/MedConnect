@@ -1,0 +1,20 @@
+// Firebase initialization module
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA82d_EsjYMruZNqMxjnheHfsa8nfk-p04",
+  authDomain: "html-css-90681.firebaseapp.com",
+  projectId: "html-css-90681",
+  storageBucket: "html-css-90681.firebasestorage.app",
+  messagingSenderId: "83306923201",
+  appId: "1:83306923201:web:69f35cfafe50a30c4c0040",
+  measurementId: "G-2NY6JJPPZT"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { app, auth, db };

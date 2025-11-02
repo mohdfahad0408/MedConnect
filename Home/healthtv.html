@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedConnect - Health Education Videos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:  #0284c7;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(33, 147, 176, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(109, 213, 237, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: moveGradient 20s ease infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%);
+            background-size: 60px 60px;
+            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            animation: movePattern 30s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes moveGradient {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+                opacity: 0.8;
+            }
+            66% {
+                transform: translate(-30px, 30px) scale(0.9);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes movePattern {
+            0% {
+                background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            }
+            100% {
+                background-position: 60px 60px, 60px 90px, 90px 30px, 30px 60px;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #0284c7;
+        }
+
+        h1 {
+            color: black;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            padding-left: 15px;
+            border-left: 5px solid #0284c7;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 50px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0284c7;
+            text-align: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="bi-heart-pulse-fill"></span>MedConnect
+            </div>
+            
+            <p class="subtitle">Your trusted source for health education videos</p>
+        </header>
+
+        <!-- General Health Section -->
+        <section class="section">
+            <h2 class="section-title">General Health & Wellness</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/DBTmNm8D-84?si=8YRNu5smrxVugOV3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Understanding Your Health</h3>
+                        <p class="video-description">Learn the basics of maintaining good health and wellness in your daily life.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Evji_ebWZQU?si=ZkoF1QJSNmWlFqsa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Nutrition Fundamentals</h3>
+                        <p class="video-description">Essential nutrition tips for a healthier lifestyle and balanced diet.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eWZ_8iQi59c?si=l8c1Wdf4QoLIOSrs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Mental Health Awareness</h3>
+                        <p class="video-description">Understanding mental health and emotional wellbeing strategies.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fitness & Exercise Section -->
+        <section class="section">
+            <h2 class="section-title">Fitness & Exercise</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/vNaYoV2g2Zc?si=x5YgdGRrHhAQSAjg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Exercise for Beginners</h3>
+                        <p class="video-description">Start your fitness journey with these simple exercises.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/mtX-B5gbgmM?si=_eujO_oIqmtJvdpN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Cardio Health</h3>
+                        <p class="video-description">Improve your cardiovascular health with these exercises.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/UIPvIYsjfpo?si=ngfAiDYKV_NHl5xt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Yoga & Flexibility</h3>
+                        <p class="video-description">Enhance flexibility and reduce stress through yoga practice.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medical Education Section -->
+        <section class="section">
+            <h2 class="section-title">Medical Education</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kw9EJbezlK4?si=4paNKf56i2XQIAj6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">How Your Body Works</h3>
+                        <p class="video-description">Discover the amazing functions of the human body systems.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2muqPd3RfoE?si=RgaR-N_i_SZTrKQO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Understanding Diseases</h3>
+                        <p class="video-description">Learn about common diseases and prevention methods.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5OKFljZ2GQE?si=93HFApJPjWfxYrzX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">First Aid Basics</h3>
+                        <p class="video-description">Essential first aid skills everyone should know.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 MedConnect. Empowering health through education.</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">All videos are embedded from YouTube for educational purposes.</p>
+        </footer>
+    </div>
+</body>
+</html>

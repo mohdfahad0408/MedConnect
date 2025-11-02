@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedConnect - Schedule Your Medical Appointments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="bi-heart-pulse-fill"></span>MedConnect
+            </div>
+            <div class="nav-links">
+                <a href="/Home/index.html">Home</a>
+                <a href="/Home/bookap.html">Doctors</a>
+                <a href="/Home/healthtv.html">Health TV</a>
+                <a href="/Home/myappoint.html">My Appointments</a>
+                <div class="dropdown">
+                    <a href="#signin" class="btn-secondary" style="padding: 0.5rem 1.25rem;">Sign In ▾</a>
+                    <div class="dropdown-content">
+                        <a href="/Signin/User/sigin.html">👤 Login as Patient</a>
+                        <a href="/Signin/Admin/Admin.html">🏥 Login as Hospital/Doctor</a>
+                    </div>
+                </div>
+                
+            </div>
+        </nav>
+    </header>
+
+    <!-- chat bot -->
+      <form action="chatbot.html">
+<button class="chatbot-btn" id="mummyChatBtn"><img src="Gemini_Generated_Image_x0bgbnx0bgbnx0bg-removebg-preview.png" height="90px" alt="" srcset=""></button>
+</form>
+
+    <!-- Hero Section -->
+    
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Schedule Your Medical Appointments with Ease</h1>
+      <p>Book appointments with qualified healthcare professionals, manage your visits, and access quality medical care all in one place.</p>
+      <div class="hero-buttons">
+        <button class="btn-primary">📅 Book Appointment</button>
+        <button class="btn-secondary">🔍 Browse Doctors</button>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop" alt="Doctor consultation">
+    </div>
+  </section>
+
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stat-item">
+            <h3>5,000+</h3>
+            <p>Patients</p>
+        </div>
+        <div class="stat-item">
+            <h3>200+</h3>
+            <p>Doctors</p>
+        </div>
+        <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Support</p>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="how-it-works-content">
+            <h2>How It Works</h2>
+            <p class="how-it-works-subtitle">Book your appointment in three simple steps</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">🔍</div>
+                    <h3>Choose Your Doctor</h3>
+                    <p>Browse our directory of qualified healthcare professionals and select the specialist that meets your needs.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">📅</div>
+                    <h3>Select Time & Date</h3>
+                    <p>Pick a convenient appointment time from the available slots that fit your schedule.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">✓</div>
+                    <h3>Confirm Booking</h3>
+                    <p>Complete your booking and receive instant confirmation with all appointment details.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Search -->
+    <section class="quick-search">
+        <h2>Quick Appointment Search</h2>
+        <form class="search-form">
+            <div class="form-group">
+                <label for="specialty">Specialty</label>
+                <select id="specialty">
+                    <option>Select specialty</option>
+                    <option>Cardiology</option>
+                    <option>Neurology</option>
+                    <option>Pediatrics</option>
+                    <option>Orthopedics</option>
+                    <option>Dermatology</option>
+                    <option>Ophthalmology</option>
+                    <option>Dentistry</option>
+                    <option>General Practice</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Preferred Date</label>
+                <input type="date" id="date" placeholder="dd/mm/yyyy">
+            </div>
+            <div class="form-group">
+                <label style="opacity: 0;">Search</label>
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 0.875rem;">🔍 Search Appointments</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Departments -->
+     <section class="departments">
+        <div class="departments-content">
+            <h2>Browse by Department</h2>
+            <p class="departments-subtitle">Find the right specialist for your healthcare needs</p>
+            <div class="department-grid">
+                <div class="department-card">
+                    <div class="department-icon bi-heart-pulse"></div>
+                    <h3>Cardiology</h3>
+                    <p>24 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon">🧠</div>
+                    <h3>Neurology</h3>
+                    <p>18 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon bi-person-hearts"></div>
+                    <h3>Pediatrics</h3>
+                    <p>32 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon bi-bandaid"></div>
+                    <h3>Orthopedics</h3>
+                    <p>20 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon bi-droplet"></div>
+                    <h3>Dermatology</h3>
+                    <p>15 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon bi-eye"></div>
+                    <h3>Ophthalmology</h3>
+                    <p>12 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon">🦷</div>
+                    <h3>Dentistry</h3>
+                    <p>28 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+                <div class="department-card">
+                    <div class="department-icon bi-hospital"></div>
+                    <h3>General Practice</h3>
+                    <p>45 doctors available</p>
+                    <a href="#">View Doctors →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    MedConnect
+                </div>
+                <p style="color: #d1d5db;">Your trusted partner for quality healthcare and medical appointments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="/Home/bookap.html">Doctors</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Patient Resources</h4>
+                <ul>
+                    <li><a href="/Home/Faqs.html">FAQs</a></li>
+                    <li><a href="/Home/Privacupolicy.html">Privacy Policy</a></li>
+                    <li><a href="/Home/termsofservice.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p>📞 +1 (555) 123-4567</p>
+                <p>✉️ info@medconnect.com</p>
+                <p>📍 123 Health St, Medical City</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+</body>
+</html>

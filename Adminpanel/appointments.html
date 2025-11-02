@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Care</title>
+    <style>
+        :root { --primary-color:#0ea5e9; --primary-dark:#0284c7; --primary-light:#bae6fd; --text-primary:#1f2937; --text-secondary:#6b7280; --text-tertiary:#9ca3af; --bg-primary:#ffffff; --bg-secondary:#f9fafb; --bg-tertiary:#f5f7fb; --border-color:#e5e7eb; --shadow-sm:0 1px 3px rgba(0,0,0,0.05); --sidebar-width:280px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-tertiary);color:var(--text-primary)}
+        .sidebar{width:var(--sidebar-width);background:#1a1d2e;color:white;padding:30px 0;position:fixed;height:100vh}
+        .logo{padding:0 30px;margin-bottom:50px;display:flex;align-items:center;gap:12px;font-size:1.5em;font-weight:600}
+        .nav-item{padding:14px 30px;display:flex;align-items:center;gap:15px;color:var(--text-tertiary);text-decoration:none}
+        .nav-item:hover{background:rgba(14,165,233,.1);color:#fff}
+        .nav-item.active{background:rgba(14,165,233,.15);color:#fff;border-left:3px solid var(--primary-color)}
+        .main-content{margin-left:var(--sidebar-width);padding:30px 40px}
+        .card{background:var(--bg-primary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+        .card-title{font-size:1.2em;font-weight:600;margin-bottom:12px}
+        .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+        input,select{padding:10px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:14px;background:#fff}
+        .btn{background:var(--primary-color);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer}
+        table{width:100%;border-collapse:separate;border-spacing:0 8px}
+        th,td{text-align:left;padding:10px 12px}
+        th{color:var(--text-secondary);font-weight:600}
+        tbody tr{background:#fff}
+        .row-actions button{margin-right:8px}
+        .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+        .badge{padding:6px 12px;border-radius:12px;font-weight:600;font-size:12px}
+        .b-confirmed{background:#d1fae5;color:#065f46}.b-pending{background:#fef3c7;color:#92400e}.b-completed{background:#e0e7ff;color:#4338ca}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><span class="logo-icon">🏥</span><span>Care</span></div>
+        <div class="nav-section">
+            <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+            <a class="nav-item active" href="appointments.html">📅 Appointments</a>
+            <a class="nav-item" href="patients.html">👥 My Patients</a>
+            <a class="nav-item" href="reviews.html">⭐ Reviews</a>
+            <a class="nav-item" href="earnings.html">💰 Earnings</a>
+            <a class="nav-item" href="analytics.html">📈 Analytics</a>
+            <a class="nav-item" href="profile.html">👤 My Profile</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Add / Edit Appointment</div>
+            <div class="form-row">
+                <select id="patientId"></select>
+                <input id="date" type="date" placeholder="Date">
+                <input id="time" type="time" placeholder="Time">
+                <input id="type" placeholder="Type (e.g., Consultation)">
+                <select id="status">
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div style="margin-top:12px">
+                <button id="saveBtn" class="btn">Save Appointment</button>
+                <button id="resetBtn" class="btn" style="background:#9ca3af">Reset</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Appointments</div>
+            <div class="filters">
+                <input id="q" placeholder="Search by patient or type">
+                <select id="fStatus">
+                    <option value="">All Statuses</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <input id="fDate" type="date">
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Patient</th><th>Date</th><th>Time</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="apptsBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const state = { current:null };
+        function getStore(key, fallback){ try{ return JSON.parse(localStorage.getItem(key))||fallback;}catch{return fallback;} }
+        function setStore(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+        function uid(prefix){ return prefix+Math.random().toString(36).slice(2,9); }
+
+        function loadPatientsSelect(){
+            const patients=getStore('patients',[]);
+            const sel=document.getElementById('patientId');
+            sel.innerHTML = '<option value="">Select Patient</option>' + patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+        }
+
+        function render(){
+            const appts=getStore('appointments',[]);
+            const patients=getStore('patients',[]);
+            const q=(document.getElementById('q').value||'').toLowerCase();
+            const fStatus=document.getElementById('fStatus').value;
+            const fDate=document.getElementById('fDate').value;
+            const body=document.getElementById('apptsBody');
+            body.innerHTML='';
+            appts
+              .filter(a => !fStatus || a.status===fStatus)
+              .filter(a => !fDate || a.date===fDate)
+              .filter(a => {
+                  const p = patients.find(p=>p.id===a.patientId);
+                  const name=(p?p.name:'').toLowerCase();
+                  return name.includes(q)||(a.type||'').toLowerCase().includes(q);
+              })
+              .sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time))
+              .forEach(a=>{
+                const p=patients.find(x=>x.id===a.patientId);
+                const tr=document.createElement('tr');
+                tr.innerHTML = `<td>${p?p.name:'Unknown'}</td>
+                                <td>${a.date}</td>
+                                <td>${a.time}</td>
+                                <td>${a.type||''}</td>
+                                <td><span class="badge ${a.status==='confirmed'?'b-confirmed':(a.status==='pending'?'b-pending':'b-completed')}">${a.status}</span></td>
+                                <td class="row-actions">
+                                  <button class="btn" style="background:#0284c7" data-edit="${a.id}">Edit</button>
+                                  <button class="btn" style="background:#ef4444" data-del="${a.id}">Delete</button>
+                                </td>`;
+                body.appendChild(tr);
+              });
+        }
+
+        function save(){
+            const patientId=document.getElementById('patientId').value;
+            const date=document.getElementById('date').value;
+            const time=document.getElementById('time').value;
+            const type=document.getElementById('type').value.trim();
+            const status=document.getElementById('status').value;
+            if(!patientId||!date||!time){ alert('Patient, date and time are required'); return; }
+            const appts=getStore('appointments',[]);
+            if(state.current){
+                const idx=appts.findIndex(a=>a.id===state.current);
+                if(idx>=0){ appts[idx]={...appts[idx],patientId,date,time,type,status}; }
+            } else {
+                appts.push({id:uid('a'),patientId,date,time,type,status});
+            }
+            setStore('appointments',appts);
+            resetForm();
+            render();
+        }
+
+        function resetForm(){ state.current=null; ['patientId','date','time','type','status'].forEach(id=>document.getElementById(id).value=''); loadPatientsSelect(); }
+
+        document.getElementById('apptsBody').addEventListener('click',e=>{
+            const del=e.target.getAttribute('data-del');
+            const edit=e.target.getAttribute('data-edit');
+            const appts=getStore('appointments',[]);
+            if(del){ if(confirm('Delete this appointment?')){ setStore('appointments',appts.filter(a=>a.id!==del)); render(); } }
+            if(edit){ const a=appts.find(x=>x.id===edit); if(!a) return; state.current=a.id; loadPatientsSelect(); document.getElementById('patientId').value=a.patientId; document.getElementById('date').value=a.date; document.getElementById('time').value=a.time; document.getElementById('type').value=a.type||''; document.getElementById('status').value=a.status; window.scrollTo({top:0,behavior:'smooth'}); }
+        });
+
+        ['q','fStatus','fDate'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+        document.getElementById('saveBtn').addEventListener('click',save);
+        document.getElementById('resetBtn').addEventListener('click',resetForm);
+
+        (function seed(){
+            if(!localStorage.getItem('patients')){ setStore('patients',[{id:'p1',name:'Sarah Johnson'},{id:'p2',name:'Michael Chen'}]); }
+            if(!localStorage.getItem('appointments')){
+                const today=new Date(); const yyyy=today.getFullYear(); const mm=String(today.getMonth()+1).padStart(2,'0'); const dd=String(today.getDate()).padStart(2,'0');
+                const d=`${yyyy}-${mm}-${dd}`;
+                setStore('appointments',[{id:'a1',patientId:'p1',date:d,time:'09:00',type:'Consultation',status:'confirmed'}]);
+            }
+        })();
+        loadPatientsSelect();
+        render();
+    </script>
+</body>
+</html>
+
+

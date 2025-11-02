@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnings - Care</title>
+    <style>
+        :root { --primary-color:#0ea5e9; --primary-dark:#0284c7; --primary-light:#bae6fd; --text-primary:#1f2937; --text-secondary:#6b7280; --text-tertiary:#9ca3af; --bg-primary:#ffffff; --bg-secondary:#f9fafb; --bg-tertiary:#f5f7fb; --border-color:#e5e7eb; --shadow-sm:0 1px 3px rgba(0,0,0,0.05); --sidebar-width:280px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-tertiary);color:var(--text-primary)}
+        .sidebar{width:var(--sidebar-width);background:#1a1d2e;color:white;padding:30px 0;position:fixed;height:100vh}
+        .logo{padding:0 30px;margin-bottom:50px;display:flex;align-items:center;gap:12px;font-size:1.5em;font-weight:600}
+        .nav-item{padding:14px 30px;display:flex;align-items:center;gap:15px;color:var(--text-tertiary);text-decoration:none}
+        .nav-item:hover{background:rgba(14,165,233,.1);color:#fff}
+        .nav-item.active{background:rgba(14,165,233,.15);color:#fff;border-left:3px solid var(--primary-color)}
+        .main-content{margin-left:var(--sidebar-width);padding:30px 40px}
+        .card{background:var(--bg-primary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+        .card-title{font-size:1.2em;font-weight:600;margin-bottom:12px}
+        .row{display:flex;gap:12px;flex-wrap:wrap}
+        .pill{padding:14px;border-radius:12px;background:var(--bg-secondary);min-width:200px;flex:1}
+        .label{color:var(--text-secondary);font-size:.9em;margin-bottom:6px}
+        .value{font-size:1.6em;font-weight:700}
+        table{width:100%;border-collapse:separate;border-spacing:0 8px}
+        th,td{text-align:left;padding:10px 12px}
+        th{color:var(--text-secondary);font-weight:600}
+        tbody tr{background:#fff}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><span class="logo-icon">🏥</span><span>Care</span></div>
+        <div class="nav-section">
+            <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+            <a class="nav-item" href="appointments.html">📅 Appointments</a>
+            <a class="nav-item" href="patients.html">👥 My Patients</a>
+            <a class="nav-item" href="reviews.html">⭐ Reviews</a>
+            <a class="nav-item active" href="earnings.html">💰 Earnings</a>
+            <a class="nav-item" href="analytics.html">📈 Analytics</a>
+            <a class="nav-item" href="profile.html">👤 My Profile</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Earnings Summary</div>
+            <div class="row">
+                <div class="pill"><div class="label">This Month</div><div id="mTotal" class="value">₹0</div></div>
+                <div class="pill"><div class="label">This Week</div><div id="wTotal" class="value">₹0</div></div>
+                <div class="pill"><div class="label">Today</div><div id="dTotal" class="value">₹0</div></div>
+                <div class="pill"><div class="label">Pending Payments</div><div id="pending" class="value">₹0</div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Appointments Breakdown</div>
+            <table>
+                <thead><tr><th>Date</th><th>Patient</th><th>Type</th><th>Status</th><th>Fee</th></tr></thead>
+                <tbody id="rows"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function getStore(k,f){ try{return JSON.parse(localStorage.getItem(k))||f;}catch{return f;} }
+        function currency(n){ return '₹'+Number(n).toLocaleString('en-IN'); }
+        function feeFor(a){ return 1200; } // flat fee example
+        function load(){
+            const appts=getStore('appointments',[]);
+            const patients=getStore('patients',[]);
+            const now=new Date();
+            const iso=(d)=> d.toISOString().slice(0,10);
+            const todayIso=iso(now);
+            const startWeek=new Date(now); startWeek.setDate(now.getDate()-now.getDay()); // Sunday start
+            const weekIso=iso(startWeek);
+            const monthKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+            let m=0,w=0,d=0,pending=0;
+            const tbody=document.getElementById('rows'); tbody.innerHTML='';
+            appts.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)).forEach(a=>{
+                const f=feeFor(a);
+                if(a.date.startsWith(monthKey)) m+=f;
+                if(a.date>=weekIso) w+=f;
+                if(a.date===todayIso) d+=f;
+                if(a.status==='pending') pending+=f;
+                const p=patients.find(x=>x.id===a.patientId);
+                const tr=document.createElement('tr');
+                tr.innerHTML=`<td>${a.date} ${a.time}</td><td>${p?p.name:'Unknown'}</td><td>${a.type||''}</td><td>${a.status}</td><td>${currency(f)}</td>`;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('mTotal').textContent=currency(m);
+            document.getElementById('wTotal').textContent=currency(w);
+            document.getElementById('dTotal').textContent=currency(d);
+            document.getElementById('pending').textContent=currency(pending);
+        }
+        load();
+    </script>
+</body>
+</html>
+
+
