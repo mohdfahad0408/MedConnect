@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - MedConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0284c7;
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: #0284c7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0284c7;
+            background: #e0f2fe;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0369a1;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: #0284c7;
+            color: #0284c7;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 1rem 1.25rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+            border-radius: 0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            transform: translateY(0);
+            padding-left: 1.5rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .btn-secondary {
+            background: #e0f2fe;
+            color: #0284c7;
+            border-color: #0284c7;
+        }
+
+        /* Hero Section */
+        .hero-terms {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-terms h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-terms p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .terms-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem 3rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-nav {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .sidebar-nav h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            color: #6b7280;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #0284c7;
+            color: white;
+        }
+
+        /* Content */
+        .terms-content {
+            background: white;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .content-section:last-child {
+            border-bottom: none;
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            scroll-margin-top: 100px;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            color: #374151;
+            margin: 2rem 0 1rem;
+        }
+
+        .content-section p {
+            color: #6b7280;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            color: #6b7280;
+            line-height: 1.8;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            color: #78350f;
+            margin: 0;
+        }
+
+        .info-box {
+            background: #e0f2fe;
+            border-left: 4px solid #0284c7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box p {
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .update-date {
+            background: #f9fafb;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .footer-section h4 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-section p {
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 968px) {
+            .terms-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-terms h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                MedConnect
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#doctors">Doctors</a>
+                <a href="#appointments">My Appointments</a>
+                <div class="dropdown">
+                    <a href="#signin" class="btn-secondary" style="padding: 0.5rem 1.25rem;">Sign In ▾</a>
+                    <div class="dropdown-content">
+                        <a href="#patient-login">👤 Login as Patient</a>
+                        <a href="#doctor-login">🏥 Login as Hospital/Doctor</a>
+                    </div>
+                </div>
+                <a href="#book" class="btn-primary">Book Appointment</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-terms">
+        <h1>Terms of Service</h1>
+        <p>Please read these terms carefully before using MedConnect</p>
+    </section>
+
+    <!-- Terms Content -->
+    <div class="terms-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#acceptance" class="active">Acceptance of Terms</a></li>
+                    <li><a href="#eligibility">Eligibility</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#accounts">User Accounts</a></li>
+                    <li><a href="#appointments">Appointments</a></li>
+                    <li><a href="#payments">Payments & Fees</a></li>
+                    <li><a href="#conduct">User Conduct</a></li>
+                    <li><a href="#providers">Healthcare Providers</a></li>
+                    <li><a href="#intellectual">Intellectual Property</a></li>
+                    <li><a href="#disclaimer">Disclaimer</a></li>
+                    <li><a href="#limitation">Limitation of Liability</a></li>
+                    <li><a href="#termination">Termination</a></li>
+                    <li><a href="#disputes">Dispute Resolution</a></li>
+                    <li><a href="#general">General Provisions</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="terms-content">
+            <div class="update-date">
+                <strong>Effective Date:</strong> November 1, 2025 | <strong>Last Updated:</strong> November 1, 2025
+            </div>
+
+            <section class="content-section" id="acceptance">
+                <h2>1. Acceptance of Terms</h2>
+                <p>
+                    Welcome to MedConnect. These Terms of Service ("Terms") constitute a legally binding agreement between you and MedConnect Inc. ("MedConnect," "we," "us," or "our") governing your access to and use of the MedConnect platform, including our website, mobile applications, and related services (collectively, the "Services").
+                </p>
+                <p>
+                    By accessing or using our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree with these Terms, you must not access or use our Services.
+                </p>
+                <div class="highlight-box">
+                    <p>
+                        <strong>⚠️ Important Notice:</strong> These Terms contain provisions that limit our liability and require you to resolve disputes through arbitration on an individual basis rather than through class actions. Please read Section 13 (Dispute Resolution) carefully.
+                    </p>
+                </div>
+            </section>
+
+            <section class="content-section" id="eligibility">
+                <h2>2. Eligibility</h2>
+                <p>To use MedConnect, you must meet the following requirements:</p>
+                <ul>
+                    <li>You must be at least 18 years of age</li>
+                    <li>You must have the legal capacity to enter into binding contracts</li>
+                    <li>You must not be prohibited from using our Services under applicable laws</li>
+                    <li>You must provide accurate and complete registration information</li>
+                </ul>
+                <h3>2.1 Minor Accounts</h3>
+                <p>
+                    Parents or legal guardians may create accounts and book appointments on behalf of minors. By doing so, you represent that you have the legal authority to act on behalf of the minor and agree to be responsible for all activities conducted through the account.
+                </p>
+            </section>
+
+            <section class="content-section" id="services">
+                <h2>3. Our Services</h2>
+                <p>MedConnect provides an online platform that connects patients with healthcare providers for the purpose of scheduling and managing medical appointments.</p>
+                
+                <h3>3.1 Platform Services</h3>
+                <p>Our Services include:</p>
+                <ul>
+                    <li>Appointment booking and scheduling tools</li>
+                    <li>Healthcare provider directory and search functionality</li>
+                    <li>Appointment reminders and notifications</li>
+                    <li>Payment processing for appointments</li>
+                    <li>Medical record management and storage</li>
+                    <li>Communication tools between patients and providers</li>
+                </ul>
+
+                <h3>3.2 Nature of Services</h3>
+                <div class="info-box">
+                    <p>
+                        <strong>Important:</strong> MedConnect is a technology platform that facilitates connections between patients and healthcare providers. We do not provide medical services, medical advice, or diagnosis. All medical services are provided directly by independent healthcare providers who use our platform.
+                    </p>
+                </div>
+            </section>
+
+            <section class="content-section" id="accounts">
+                <h2>4. User Accounts</h2>
+                
+                <h3>4.1 Account Creation</h3>
+                <p>To access certain features, you must create an account. When creating an account, you agree to:</p>
+                <ul>
+                    <li>Provide accurate, current, and complete information</li>
+                    <li>Maintain and promptly update your account information</li>
+                    <li>Maintain the security of your password and account</li>
+                    <li>Accept responsibility for all activities under your account</li>
+                    <li>Notify us immediately of any unauthorized access</li>
+                </ul>
+
+                <h3>4.2 Account Security</h3>
+                <p>
+                    You are responsible for maintaining the confidentiality of your account credentials. You agree not to share your account with others or allow others to access your account. We recommend using strong, unique passwords and enabling two-factor authentication where available.
+                </p>
+
+                <h3>4.3 Account Types</h3>
+                <p>We offer different account types:</p>
+                <ul>
+                    <li><strong>Patient Accounts:</strong> For individuals seeking healthcare services</li>
+                    <li><strong>Provider Accounts:</strong> For licensed healthcare professionals and facilities</li>
+                </ul>
+                <p>Each account type has specific terms and requirements detailed in the respective sections below.</p>
+            </section>
+
+            <section class="content-section" id="appointments">
+                <h2>5. Appointments and Bookings</h2>
+                
+                <h3>5.1 Booking Process</h3>
+                <p>When you book an appointment through MedConnect:</p>
+                <ul>
+                    <li>You enter into a direct agreement with the healthcare provider</li>
+                    <li>You agree to arrive on time and provide accurate health information</li>
+                    <li>You understand that appointment availability is determined by providers</li>
+                    <li>You acknowledge that providers may need to reschedule due to emergencies</li>
+                </ul>
+
+                <h3>5.2 Cancellations and Rescheduling</h3>
+                <ul>
+                    <li><strong>Patient Cancellations:</strong> You may cancel or reschedule appointments up to 24 hours before the scheduled time without penalty. Cancellations within 24 hours may result in cancellation fees.</li>
+                    <li><strong>Provider Cancellations:</strong> Healthcare providers may cancel appointments due to emergencies or unforeseen circumstances. We will notify you promptly and help you reschedule.</li>
+                    <li><strong>No-Shows:</strong> Failure to attend a scheduled appointment without prior cancellation may result in fees and may affect your ability to book future appointments.</li>
+                </ul>
+
+                <h3>5.3 Appointment Conduct</h3>
+                <p>During appointments, you agree to:</p>
+                <ul>
+                    <li>Treat healthcare providers and staff with respect</li>
+                    <li>Provide accurate and complete medical information</li>
+                    <li>Follow the healthcare facility's rules and policies</li>
+                    <li>Not record or photograph without explicit consent</li>
+                </ul>
+            </section>
+
+            <section class="content-section" id="payments">
+                <h2>6. Payments and Fees</h2>
+                
+                <h3>6.1 Payment Processing</h3>
+                <p>
+                    MedConnect processes payments on behalf of healthcare providers. By providing payment information, you authorize us to charge your payment method for appointments, fees, and other services.
+                </p>
+
+                <h3>6.2 Fees and Charges</h3>
+                <p>You may be charged for:</p>
+                <ul>
+                    <li>Appointment consultation fees</li>
+                    <li>Service fees (where applicable)</li>
+                    <li>Late cancellation fees</li>
+                    <li>No-show fees</li>
+                    <li>Additional services requested during appointments</li>
+                </ul>
+
+                <h3>6.3 Refunds</h3>
+                <p>
+                    Refund policies are determined by individual healthcare providers. Generally:
+                </p>
+                <ul>
+                    <li>Refunds may be available for provider cancellations</li>
+                    <li>Service fees may be non-refundable</li>
+                    <li>Refund requests must be submitted within 30 days</li>
+                    <li>Refunds are processed within 7-10 business days</li>
+                </ul>
+
+                <h3>6.4 Insurance</h3>
+                <p>
+                    If you choose to use insurance, you are responsible for verifying coverage and obtaining any necessary pre-authorizations. MedConnect is not responsible for insurance claim denials or coverage disputes.
+                </p>
+            </section>
+
+            <section class="content-section" id="conduct">
+                <h2>7. User Conduct and Prohibited Activities</h2>
+                <p>You agree not to:</p>
+                <ul>
+                    <li>Violate any laws, regulations, or third-party rights</li>
+                    <li>Provide false or misleading information</li>
+                    <li>Impersonate any person or entity</li>
+                    <li>Harass, threaten, or abuse other users or healthcare providers</li>
+                    <li>Use automated tools to access or scrape our Services</li>
+                    <li>Attempt to gain unauthorized access to our systems</li>
+                    <li>Interfere with or disrupt our Services</li>
+                    <li>Share your account credentials with others</li>
+                    <li>Use our Services for any illegal or unauthorized purpose</li>
+                    <li>Post or transmit viruses, malware, or harmful code</li>
+                    <li>Collect information about other users without consent</li>
+                    <li>Create multiple accounts to circumvent restrictions</li>
+                </ul>
+                <p>
+                    Violation of these terms may result in immediate account suspension or termination and may be reported to law enforcement authorities.
+                </p>
+            </section>
+
+            <section class="content-section" id="providers">
+                <h2>8. Healthcare Providers</h2>
+                
+                <h3>8.1 Provider Relationship</h3>
+                <p>
+                    Healthcare providers using MedConnect are independent contractors, not employees or agents of MedConnect. We do not control or direct the medical services provided. Each provider is solely responsible for their medical practice, including quality of care, diagnosis, and treatment.
+                </p>
+
+                <h3>8.2 Provider Credentials</h3>
+                <p>
+                    While we verify basic licensing information for providers on our platform, you are encouraged to independently verify credentials, licenses, and qualifications. MedConnect does not guarantee the qualifications, expertise, or quality of services provided by any healthcare provider.
+                </p>
+
+                <h3>8.3 Provider Terms</h3>
+                <p>Healthcare providers using MedConnect agree to:</p>
+                <ul>
+                    <li>Maintain valid professional licenses and certifications</li>
+                    <li>Comply with all applicable healthcare laws and regulations</li>
+                    <li>Maintain appropriate malpractice insurance</li>
+                    <li>Provide accurate information about services and availability</li>
+                    <li>Respect patient privacy and confidentiality</li>
+                    <li>Follow HIPAA and other data protection requirements</li>
+                </ul>
+            </section>
+
+            <section class="content-section" id="intellectual">
+                <h2>9. Intellectual Property Rights</h2>
+                
+                <h3>9.1 Our Rights</h3>
+                <p>
+                    The MedConnect platform, including all content, features, functionality, design, code, and materials, is owned by MedConnect and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works without our express written permission.
+                </p>
+
+                <h3>9.2 Trademarks</h3>
+                <p>
+                    MedConnect, the MedConnect logo, and other marks are trademarks of MedConnect Inc. You may not use these marks without our prior written consent.
+                </p>
+
+                <h3>9.3 User Content</h3>
+                <p>
+                    You retain ownership of any content you submit to MedConnect (reviews, photos, etc.). However, by submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, and display your content in connection with our Services.
+                </p>
+            </section>
+
+            <section class="content-section" id="disclaimer">
+                <h2>10. Disclaimer of Warranties</h2>
+                <div class="highlight-box">
+                    <p>
+                        <strong>⚠️ IMPORTANT - PLEASE READ CAREFULLY</strong>
+                    </p>
+                </div>
+                <p>
+                    THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR COURSE OF PERFORMANCE.
+                </p>
+                <p>
+                    MEDCONNECT DOES NOT WARRANT THAT:
+                </p>
+                <ul>
+                    <li>The Services will meet your requirements or expectations</li>
+                    <li>The Services will be uninterrupted, timely, secure, or error-free</li>
+                    <li>The information provided through the Services is accurate or reliable</li>
+                    <li>Any defects or errors will be corrected</li>
+                    <li>The Services are free from viruses or harmful components</li>
+                </ul>
+                <p>
+                    <strong>Medical Disclaimer:</strong> MedConnect is a platform service only and does not provide medical advice, diagnosis, or treatment. Always seek the advice of your physician or qualified healthcare provider with any questions about medical conditions. Never disregard professional medical advice or delay seeking it because of information accessed through MedConnect.
+                </p>
+            </section>
+
+            <section class="content-section" id="limitation">
+                <h2>11. Limitation of Liability</h2>
+                <p>
+                    TO THE MAXIMUM EXTENT PERMITTED BY LAW, MEDCONNECT SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
+                </p>
+                <p>
+                    IN NO EVENT SHALL MEDCONNECT'S TOTAL LIABILITY TO YOU FOR ALL CLAIMS EXCEED THE GREATER OF $100 USD OR THE AMOUNT YOU PAID TO MEDCONNECT IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM.
+                </p>
+                <p>
+                    YOU SPECIFICALLY ACKNOWLEDGE THAT MEDCONNECT SHALL NOT BE LIABLE FOR:
+                </p>
+                <ul>
+                    <li>The acts, omissions, or conduct of healthcare providers</li>
+                    <li>The quality, safety, or legality of medical services provided</li>
+                    <li>Any medical outcomes or complications</li>
+                    <li>User-generated content or third-party content</li>
+                    <li>Unauthorized access to your account or data</li>
+                    <li>Interruption or cessation of Services</li>
+                </ul>
+            </section>
+
+            <section class="content-section" id="termination">
+                <h2>12. Termination</h2>
+                
+                <h3>12.1 Termination by You</h3>
+                <p>
+                    You may terminate your account at any time by contacting customer support or using the account deletion feature in your account settings. You remain responsible for any outstanding fees or obligations.
+                </p>
+
+                <h3>12.2 Termination by Us</h3>
+                <p>
+                    We reserve the right to suspend or terminate your account and access to Services at any time, with or without cause, with or without notice, for any reason including:
+                </p>
+                <ul>
+                    <li>Violation of these Terms</li>
+                    <li>Fraudulent or illegal activity</li>
+                    <li>Abusive behavior toward providers or staff</li>
+                    <li>Excessive chargebacks or payment disputes</li>
+                    <li>Providing false information</li>
+                    <li>Extended period of inactivity</li>
+                </ul>
+
+                <h3>12.3 Effect of Termination</h3>
+                <p>
+                    Upon termination:
+                </p>
+                <ul>
+                    <li>Your right to use the Services immediately ceases</li>
+                    <li>Outstanding appointments may be cancelled</li>
+                    <li>You must pay any outstanding fees</li>
+                    <li>We may delete your account and data (subject to legal requirements)</li>
+                    <li>Provisions that by their nature should survive will survive termination</li>
+                </ul>
+            </section>
+
+            <section class="content-section" id="disputes">
+                <h2>13. Dispute Resolution and Arbitration</h2>
+                
+                <h3>13.1 Informal Resolution</h3>
+                <p>
+                    Before filing a claim, you agree to contact us at legal@medconnect.com and attempt to resolve the dispute informally for at least 30 days.
+                </p>
+
+                <h3>13.2 Binding Arbitration</h3>
+                <p>
+                    If informal resolution fails, you agree that any dispute, claim, or controversy arising out of or relating to these Terms or your use of the Services shall be settled by binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules.
+                </p>
+
+                <h3>13.3 Class Action Waiver</h3>
+                <div class="highlight-box">
+                    <p>
+                        <strong>⚠️ YOU AND MEDCONNECT AGREE THAT EACH MAY BRING CLAIMS AGAINST THE OTHER ONLY IN YOUR OR ITS INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING.</strong>
+                    </p>
+                </div>
+
+                <h3>13.4 Exceptions</h3>
+                <p>
+                    Notwithstanding the above, you and MedConnect each retain the right to seek injunctive or other equitable relief in a court of competent jurisdiction to prevent actual or threatened infringement, misappropriation, or violation of intellectual property rights.
+                </p>
+            </section>
+
+            <section class="content-section" id="general">
+                <h2>14. General Provisions</h

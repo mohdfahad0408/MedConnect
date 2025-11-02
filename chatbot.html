@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAssist Chatbot</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Load Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/dist/p-icons.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2f5;
+        }
+        #chat-window {
+            height: 70vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .user-message {
+            background-color: #3b82f6; /* Blue 500 */
+            color: white;
+            border-top-left-radius: 1.25rem; /* rounded-tl-xl */
+            border-bottom-left-radius: 1.25rem; /* rounded-bl-xl */
+            border-bottom-right-radius: 0.5rem; /* rounded-br-lg */
+        }
+        .bot-message {
+            background-color: #ffffff;
+            color: #1f2937; /* Gray 800 */
+            border: 1px solid #e5e7eb; /* Gray 200 */
+            border-top-right-radius: 1.25rem; /* rounded-tr-xl */
+            border-bottom-right-radius: 1.25rem; /* rounded-br-xl */
+            border-bottom-left-radius: 0.5rem; /* rounded-bl-lg */
+        }
+        .loading-dot {
+            animation: pulse 1s infinite;
+        }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="p-4 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-2xl bg-white shadow-2xl rounded-xl flex flex-col h-[90vh] overflow-hidden">
+        <!-- Header -->
+        <header class="p-4 bg-white border-b border-blue-100 flex items-center rounded-t-xl shadow-md">
+            <ph-stethoscope-bold size="32" class="text-blue-500 mr-3"></ph-stethoscope-bold>
+            <h1 class="text-2xl font-extrabold text-gray-800">MedConnect AI</h1>
+            <span class="ml-auto text-sm text-gray-500">
+                <span id="user-status" class="inline-block w-2 h-2 rounded-full mr-1 bg-green-500"></span>
+                <span id="user-id">Connecting...</span>
+            </span>
+        </header>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="flex-grow p-4 space-y-4">
+            <!-- Initial Bot Message -->
+            <div class="flex justify-start">
+                <div class="bot-message max-w-[80%] p-3 shadow-sm">
+                    <p class="font-semibold text-blue-600 mb-1">MedAssist</p>
+                    <p>Hello! I'm MedAssist, your personal health AI. You can ask me any medical questions, or you can book an appointment. Try saying "What are the symptoms of the flu?" or "I need to book an appointment."</p>
+                </div>
+            </div>
+            <!-- Dynamic messages will be appended here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 border-t border-gray-200">
+            <div id="loading-indicator" class="hidden text-sm text-gray-500 mb-2">
+                <div class="flex items-center space-x-1">
+                    <span class="font-medium">MedAssist is typing</span>
+                    <span class="loading-dot w-2 h-2 bg-blue-500 rounded-full"></span>
+                    <span class="loading-dot w-2 h-2 bg-blue-500 rounded-full"></span>
+                    <span class="loading-dot w-2 h-2 bg-blue-500 rounded-full"></span>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <input type="text" id="user-input" placeholder="Ask a health question or book an appointment..."
+                       class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                       onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button id="send-button" onclick="sendMessage()"
+                        class="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition duration-150 flex items-center justify-center shadow-lg">
+                    <ph-paper-plane-right-fill size="24"></ph-paper-plane-right-fill>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL VARIABLES & FIREBASE INITIALIZATION ---
+
+        // Firebase Config and App ID (MANDATORY globals from the environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app;
+        let db;
+        let auth;
+        let currentUserId = 'anonymous';
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            setLogLevel('Debug');
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Authentication Setup
+            onAuthStateChanged(auth, async (user) => {
+                const userIdDisplay = document.getElementById('user-id');
+                const userStatus = document.getElementById('user-status');
+                
+                if (user) {
+                    currentUserId = user.uid;
+                    userIdDisplay.textContent = `User: ${currentUserId.substring(0, 8)}...`;
+                    userStatus.classList.add('bg-green-500');
+                    userStatus.classList.remove('bg-yellow-500');
+                    console.log("Firebase Auth Ready. User ID:", currentUserId);
+                } else {
+                    console.log("No user signed in. Attempting sign-in...");
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Authentication Error:", error);
+                        userIdDisplay.textContent = 'Auth Failed';
+                        userStatus.classList.add('bg-red-500');
+                        userStatus.classList.remove('bg-green-500', 'bg-yellow-500');
+                    }
+                }
+            });
+        } else {
+            console.warn("Firebase configuration not found. Running in standalone mode.");
+            document.getElementById('user-id').textContent = 'Standalone Mode';
+            document.getElementById('user-status').classList.remove('bg-green-500');
+            document.getElementById('user-status').classList.add('bg-yellow-500');
+        }
+
+        // --- UI & Utility Functions ---
+
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        const appendMessage = (text, sender) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = `max-w-[80%] p-3 shadow-md ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+            
+            const messageText = document.createElement('p');
+            messageText.innerHTML = sender === 'bot' ? `<span class="font-semibold text-blue-600 mb-1 block">MedAssist</span>${text}` : text;
+            
+            bubble.appendChild(messageText);
+            messageDiv.appendChild(bubble);
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        };
+
+        const showLoading = (show) => {
+            loadingIndicator.classList.toggle('hidden', !show);
+            sendButton.disabled = show;
+            userInput.disabled = show;
+        };
+        
+        // --- CHAT LOGIC ---
+
+        const APPOINTMENT_FAILURE_REASONS = [
+            { trigger: /urgent|emergency/i, reason: "Booking failed: The system detected an urgent medical request. Please call our emergency line at (555) 123-4567 immediately for critical assistance." },
+            { trigger: /Dr\. Smith|Dr\. Jones/i, reason: "Booking failed: The requested physician, Dr. Smith/Jones, is currently out of the office for mandatory continuous medical training until next month." },
+            { trigger: /Sunday|weekend/i, reason: "Booking failed: Our clinic is closed on weekends (Saturday and Sunday). Please select a weekday for your appointment." },
+            { trigger: /tomorrow/i, reason: "Booking failed: We require a minimum of 24 hours notice for online bookings. Please try a date two days from now or call the front desk for same-day availability." }
+        ];
+
+        const isAppointmentRequest = (message) => {
+            return /(book|schedule|make|set|need|get).* (appointment|checkup|visit|time|consultation)/i.test(message);
+        };
+
+        const simulateAppointmentBooking = (message) => {
+            // 1. Check for failure conditions
+            for (const item of APPOINTMENT_FAILURE_REASONS) {
+                if (item.trigger.test(message)) {
+                    // Fail and return the specific reason
+                    return { success: false, text: `<span class="text-red-600 font-bold">Booking Status: FAILED</span><br>${item.reason}` };
+                }
+            }
+
+            // 2. If no failure conditions, simulate success
+            const dateTimeMatch = message.match(/(on|for) ([\w\s,]+)/i);
+            const bookedTime = dateTimeMatch ? dateTimeMatch[2].trim() : 'a random time next week';
+
+            return { 
+                success: true, 
+                text: `<span class="text-green-600 font-bold">Booking Status: CONFIRMED!</span><br>Your appointment has been successfully scheduled for <span class="font-semibold">${bookedTime}</span>. You will receive an SMS confirmation shortly. Reference ID: MA-${Date.now().toString().slice(-6)}` 
+            };
+        };
+
+
+        const callGeminiApi = async (prompt) => {
+            const apiKey = "AIzaSyArec2LRoXiIxzsFXeEuc6FA7G-8ev62kg"; // Leave this empty for you to fill in your IDE (VS Code)
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            // System instructions guide the model to act as a helpful medical AI.
+            const systemPrompt = "You are MedAssist AI, a helpful and empathetic medical information assistant. Always provide concise, reliable, and easy-to-understand information. Emphasize that you are NOT a substitute for a doctor and should not be used for emergency medical diagnosis or treatment. For general queries, use grounding. DO NOT attempt to book an appointment, only provide medical information.";
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                // Use Google Search grounding for up-to-date medical info
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            const maxRetries = 3;
+            let response;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && i < maxRetries - 1) {
+                            const delay = Math.pow(2, i) * 1000;
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue;
+                        }
+                        throw new Error(`API request failed with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't process that query.";
+                    return text;
+
+                } catch (error) {
+                    console.error("API Call Error:", error);
+                    return "I'm having trouble connecting to my knowledge base right now. Please try again in a moment.";
+                }
+            }
+            return "I'm sorry, I couldn't fulfill your request after multiple retries.";
+        };
+
+        window.sendMessage = async () => {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            appendMessage(message, 'user');
+            userInput.value = '';
+            showLoading(true);
+
+            let botResponseText = '';
+
+            if (isAppointmentRequest(message)) {
+                // Custom, local logic for appointments (includes failure reasons)
+                const bookingResult = simulateAppointmentBooking(message);
+                botResponseText = bookingResult.text;
+            } else {
+                // Call Gemini API for general medical/health queries
+                botResponseText = await callGeminiApi(message);
+            }
+
+            appendMessage(botResponseText, 'bot');
+            showLoading(false);
+        };
+        
+        // Initial setup for the window's global function.
+        window.sendMessage = window.sendMessage; 
+
+    </script>
+</body>
+</html>
