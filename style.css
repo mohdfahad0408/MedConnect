@@ -4,7 +4,7 @@
             box-sizing: border-box;
         }
 
-        .chatbot-btn {
+.chatbot-btn {
   position: fixed;
   bottom: 45px;
   right: 45px;

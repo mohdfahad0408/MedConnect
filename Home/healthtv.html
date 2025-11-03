@@ -205,17 +205,39 @@
             font-weight: bold;
             color: #0284c7;
             text-align: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            
+            justify-content: space-between;
+            margin-bottom: 10px;    
         }
+        a{
+            text-decoration: none;
+            color: #0284c7;
+            font-weight: 600;
+        }
+        .back-btn {
+  background-color: #1f2937; /* dark gray background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #3b82f6; /* hover color */
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            
             <div class="logo">
-                <span class="bi-heart-pulse-fill"></span>MedConnect
+                <button class="back-btn" onclick="history.back()">⬅ Back</button>
+                <a href="/Home/index.html"><span class="bi-heart-pulse-fill"></span>MedConnect</a>
+                <div></div>
             </div>
             
             <p class="subtitle">Your trusted source for health education videos</p>

@@ -20,6 +20,21 @@
             overflow-y: auto;
             scroll-behavior: smooth;
         }
+        .back-btn {
+  background-color: #1f2937; /* dark gray background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #3b82f6; /* hover color */
+}
+
         .user-message {
             background-color: #3b82f6; /* Blue 500 */
             color: white;
@@ -52,7 +67,9 @@
         <!-- Header -->
         <header class="p-4 bg-white border-b border-blue-100 flex items-center rounded-t-xl shadow-md">
             <ph-stethoscope-bold size="32" class="text-blue-500 mr-3"></ph-stethoscope-bold>
-            <h1 class="text-2xl font-extrabold text-gray-800">MedConnect AI</h1>
+            <button class="back-btn" onclick="history.back()">⬅ Back</button>
+
+            <h1 class="text-2xl font-extrabold text-gray-800 ps-5" >MedConnect AI</h1>
             <span class="ml-auto text-sm text-gray-500">
                 <span id="user-status" class="inline-block w-2 h-2 rounded-full mr-1 bg-green-500"></span>
                 <span id="user-id">Connecting...</span>
